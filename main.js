@@ -955,6 +955,13 @@ function parseSdpContent(rawText, expectedType) {
     parsedSdp = trimmed;
   }
 
+  // SDP qatorlarini RFC formatiga keltirish.
+  // Ayrim uzatish/yuklash jarayonlarida LF saqlanib qoladi;
+  // Chrome uchun barcha SDP qatorlarini CRLF ko‘rinishiga normallashtiramiz.
+  parsedSdp = parsedSdp
+    .replace(/^\uFEFF/, '')
+    .replace(/\r\n|\r|\n/g, '\r\n');
+
   // SDP strukturaviy tekshiruvlari
   const hasV = parsedSdp.startsWith('v=0') || parsedSdp.includes('\nv=0') || parsedSdp.includes('\r\nv=0');
   if (!hasV) {
